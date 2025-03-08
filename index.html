@@ -65,12 +65,60 @@
     .refresh-button:hover {
       transform: rotate(360deg);
     }
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1001;
+      display: none;
+    }
+    .loading-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
-  <iframe src="https://script.google.com/macros/s/AKfycbwaltgaws4U2sfZ07l6c0PA-Jmc_8rQPwL1inrN0914iMAqR_IeiMHLtuRi1Wnt1OmA/exec"></iframe>
+  <iframe id="meterIframe" src="https://script.google.com/macros/s/AKfycbwaltgaws4U2sfZ07l6c0PA-Jmc_8rQPwL1inrN0914iMAqR_IeiMHLtuRi1Wnt1OmA/exec"></iframe>
   
   <!-- ปุ่มรีเฟรช -->
-  <button class="refresh-button" onclick="document.querySelector('iframe').contentWindow.location.reload();">🔄</button>
+  <button class="refresh-button" onclick="refreshIframe()">🔄</button>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <script>
+    function refreshIframe() {
+      const iframe = document.getElementById('meterIframe');
+      const loadingOverlay = document.getElementById('loadingOverlay');
+
+      // แสดง loading
+      loadingOverlay.style.display = 'flex';
+
+      // รีเฟรช iframe
+      iframe.src = iframe.src;
+
+      // ซ่อน loading เมื่อ iframe โหลดเสร็จ
+      iframe.onload = () => {
+        loadingOverlay.style.display = 'none';
+      };
+    }
+  </script>
 </body>
 </html>
